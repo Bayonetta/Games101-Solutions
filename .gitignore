@@ -1,5 +1,5 @@
 .DS_Store
-Games101.xcworkspace/xcuserdata/
-._Games101.xcworkspace/
+*/*.xcodeproj/xcuserdata/
+*/*.xcodeproj/project.xcworkspace/xcuserdata/
 */._*
 */*/._*
