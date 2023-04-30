@@ -131,10 +131,23 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     int minY  = std::min(std::min(v[0].y(), v[1].y()), v[2].y());
     int maxX  = std::max(std::max(v[0].x(), v[1].x()), v[2].x());
     int maxY  = std::max(std::max(v[0].y(), v[1].y()), v[2].y());
+    //MSAA超采样（有黑边），着色时仅仅考虑了背景色和三角形颜色，没有考虑其他三角形的颜色
+    std::vector<Eigen::Vector2f> super_sample_step {
+        {0.25,0.25},
+        {0.75,0.25},
+        {0.25,0.75},
+        {0.75,0.75},
+    };
 
     for (int x = minX; x < maxX; x++) {
         for (int y = minY; y < maxY; y++) {
-            if (insideTriangle(x + 0.5, y + 0.5, t.v)) {
+            int count = 0;
+            for (int z = 0; z < 4; z++) {
+                if (insideTriangle(x + super_sample_step[z][0], y + super_sample_step[z][1], t.v)) {
+                    count++;
+                }
+            }
+            if (count > 0) {
                 auto[alpha, beta, gamma] = computeBarycentric2D(x + 0.5, y + 0.5, t.v);
                 float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
                 float z_interpolated = alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
@@ -145,7 +158,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
                     depth_buf[cur_index] = z_interpolated;
                     Vector3f vertex;
                     vertex << x, y, z_interpolated;
-                    set_pixel(vertex, t.getColor());
+                    set_pixel(vertex, t.getColor() * count / 4);
                 }    
             }            
         }
