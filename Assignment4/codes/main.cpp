@@ -59,8 +59,16 @@ void bezier(const std::vector<cv::Point2f> &control_points, cv::Mat &window)
     for (double t = 0.0; t <= 1.0; t += 0.001) 
     {
 		auto point = recursive_bezier(control_points, t); 
-
-        window.at<cv::Vec3b>(point.y, point.x)[1] = 255;
+	    for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
+                cv::Point2f t;
+                t.x=point.x+i;
+                t.y=point.y+j;
+                float d=sqrt(pow(t.x-((int)t.x+i)-0.5,2)+pow(t.y-((int)t.y+j)-0.5,2));
+                float ratio=1.0-sqrt(2)/3.0*d;
+                window.at<cv::Vec3b>(t.y, t.x)[1] = std::fmax(255*ratio,window.at<cv::Vec3b>(t.y, t.x)[1]);
+            }
+        }
     }
 	
 }
