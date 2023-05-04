@@ -1,3 +1,24 @@
+/*
+这段代码实现了一个MeshTriangle类，用于表示具有多个三角形面的网格模型。
+
+rayTriangleIntersect()函数实现了光线和三角形的相交检测，并更新tnear、u和v的值来表示与光线相交的三角形。该函数的参数包括三个顶点坐标(v0、v1和v2)、光线的起点和方向(orig和dir)，以及tnear、u和v参数。
+
+MeshTriangle类包含以下成员变量：
+
+- vertices：每个顶点的三维坐标数组(指向std::unique_ptr)。
+- vertexIndex：表示每个三角形的三个顶点在vertices数组中的索引的数组(指向std::unique_ptr)。
+- numTriangles：该网格模型中三角形的数量。
+- stCoordinates：每个顶点的纹理坐标数组(指向std::unique_ptr)。
+
+MeshTriangle类还实现了Object接口提供的方法，包括：
+
+- intersect()函数：通过迭代检测光线和三角形来确定与光线相交的三角形，返回true或false。
+- getSurfaceProperties()函数：返回相交点的法线和纹理坐标。
+- evalDiffuseColor()函数：返回网格的漫反射颜色。
+
+需要注意的是，这里的evalDiffuseColor()函数使用了一个简单的模式来生成网格的颜色，但在实际应用中，通常需要实现更复杂的纹理映射算法以获得更真实的外观。
+*/
+
 #pragma once
 
 #include "Object.hpp"
