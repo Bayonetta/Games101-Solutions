@@ -58,7 +58,7 @@ public:
         if (!solveQuadratic(a, b, c, t0, t1))
             return false;
         if (t0 < 0)
-            t0 = t1;
+            t0 = t2;
         if (t0 < 0)
             return false;
         tnear = t0;
