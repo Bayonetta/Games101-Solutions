@@ -15,11 +15,11 @@ namespace CGL {
 
         for (size_t i = 0; i < num_nodes; i++) {
             Vector2D position = start + i * (end - start) / (num_nodes - 1);
-            Mass mass = Mass(position, node_mass, true); 
-            masses.push_back(mass);
+            Mass *mass = new Mass(position, node_mass, false); 
+            masses.emplace_back(mass);
             if (i > 0) {
-                Spring spring = Spring(mass, masses[i-1], k);
-                springs.push_back(spring);
+                Spring *spring = new Spring(masses[i], masses[i-1], k);
+                springs.emplace_back(spring);
             }
         }
 //        Comment-in this part when you implement the constructor
@@ -33,6 +33,11 @@ namespace CGL {
         for (auto &s : springs)
         {
             // TODO (Part 2): Use Hooke's law to calculate the force on a node
+            float clength = (s->m1->position - s->m2->position).norm();
+            Vector2D distance = s->m1->position - s->m2->position;
+            Vector2D force = -s->k * distance / clength * (clength - s->rest_length);
+            s->m1->forces += force;
+            s->m2->forces -= force;
         }
 
         for (auto &m : masses)
@@ -41,7 +46,12 @@ namespace CGL {
             {
                 // TODO (Part 2): Add the force due to gravity, then compute the new velocity and position
 
+                m->forces += gravity * m->forces;
+                Vector2D a = m->forces / m->mass; 
+                m->velocity += delta_t * a;
+                m->position += delta_t * m->velocity; 
                 // TODO (Part 2): Add global damping
+
             }
 
             // Reset all forces on each mass
