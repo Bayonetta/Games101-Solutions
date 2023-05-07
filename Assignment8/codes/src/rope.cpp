@@ -39,12 +39,14 @@ namespace CGL {
             s->m1->forces += force;
             s->m2->forces -= force;
             
-            // 加上Dumping
-            Vector2D Vba = s->m2->velocity - s->m1->velocity;
-            Vector2D Fa = -0.05 * (distance.x * distance.x + distance.y * distance.y) * (s->m2->position - s->m1->position) / clength;
-            Vector2D Fb = -Fa;
-            s->m1->forces += Fb;
-            s->m2->forces += Fa;
+             // damping
+            Vector2D reve = s->m2->velocity - s->m1->velocity;
+            Vector2D force1 = 0.05 * (reve.x * distance.x + reve.y * distance.y) * distance / clength;
+            s->m1->forces += force1;
+            s->m2->forces -= force1;
+            // air damping
+            s->m1->forces -= 0.005 * s->m1->velocity;
+            s->m2->forces -= 0.005 * s->m2->velocity;
         }
 
         for (auto &m : masses)
@@ -66,11 +68,16 @@ namespace CGL {
         }
     }
 
-    void Rope::simulateVerlet(float delta_t, Vector2D gravity)
+       void Rope::simulateVerlet(float delta_t, Vector2D gravity)
     {
         for (auto &s : springs)
         {
             // TODO (Part 3): Simulate one timestep of the rope using explicit Verlet （solving constraints)
+            float length = (s->m2->position - s->m1->position).norm();
+            Vector2D dis = s->m2->position - s->m1->position;
+            Vector2D force = s->k * (length - s->rest_length) * dis / length;
+            s->m1->forces += force;
+            s->m2->forces -= force;
         }
 
         for (auto &m : masses)
@@ -79,9 +86,17 @@ namespace CGL {
             {
                 Vector2D temp_position = m->position;
                 // TODO (Part 3.1): Set the new position of the rope mass
+                m->forces += gravity;
+                Vector2D pos = m->position;
                 
+                //m->position += (m->position - m->last_position) + m->forces / m->mass * delta_t * delta_t;
                 // TODO (Part 4): Add global Verlet damping
+                m->position += (1 - 0.00005) * (m->position - m->last_position) + m->forces / m->mass * delta_t * delta_t;
+                m->last_position = pos;
             }
+            // Reset all forces on each mass
+            m->forces = Vector2D(0, 0);
         }
     }
+
 }
