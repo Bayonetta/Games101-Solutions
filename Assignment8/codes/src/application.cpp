@@ -23,10 +23,10 @@ void Application::init() {
 
   glColor3f(1.0, 1.0, 1.0);
   // Create two ropes 
-  ropeEuler = new Rope(Vector2D(0, 200), Vector2D(-400, 200), 32, config.mass,
-                       config.ks, {0});
-  ropeVerlet = new Rope(Vector2D(0, 200), Vector2D(-400, 200), 32, config.mass,
-                        config.ks, {0});
+  ropeEuler = new Rope(Vector2D(0, 200), Vector2D(-400, 200), 8, config.mass,
+                       config.ks, {0, 1, 2, 3, 4});
+  ropeVerlet = new Rope(Vector2D(0, 200), Vector2D(-400, 200), 10, config.mass,
+                        config.ks, {0, 1, 2, 3});
 }
 
 void Application::render() {
