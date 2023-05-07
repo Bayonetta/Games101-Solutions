@@ -38,6 +38,13 @@ namespace CGL {
             Vector2D force = -s->k * distance / clength * (clength - s->rest_length);
             s->m1->forces += force;
             s->m2->forces -= force;
+            
+            // 加上Dumping
+            Vector2D Vba = s->m2->velocity - s->m1->velocity;
+            Vector2D Fa = -0.05 * (Vb2a.x * Vba.x + Vb2a.y * Vba.y) * (s->m2->position - s->m1->position) / dis;
+            Vector2D Fb = -Fa;
+            s->m1->forces += Fb;
+            s->m2->forces += Fa;
         }
 
         for (auto &m : masses)
