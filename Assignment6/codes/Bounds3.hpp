@@ -109,8 +109,8 @@ inline bool Bounds3::IntersectP(const Ray& ray, const Vector3f& invDir,
         std::swap(tMin.z, tMax.z);
     }
     float tEnter, tExit;
-    tEnter = fmin(tMin,x, fmin(tMin.y, tMin.z));
-    tExit = fmax(tMax,x, fmax(tMax.y, tMax.z));
+    tEnter = fmin(tMin.x, fmin(tMin.y, tMin.z));
+    tExit = fmax(tMax.x, fmax(tMax.y, tMax.z));
     
     if (tEnter < tExit && tExit > 0) {
         return true;
