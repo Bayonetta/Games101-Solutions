@@ -41,7 +41,7 @@ namespace CGL {
             
             // 加上Dumping
             Vector2D Vba = s->m2->velocity - s->m1->velocity;
-            Vector2D Fa = -0.05 * (Vb2a.x * Vba.x + Vb2a.y * Vba.y) * (s->m2->position - s->m1->position) / dis;
+            Vector2D Fa = -0.05 * (distance.x * distance.x + distance.y * distance.y) * (s->m2->position - s->m1->position) / clength;
             Vector2D Fb = -Fa;
             s->m1->forces += Fb;
             s->m2->forces += Fa;
@@ -53,7 +53,7 @@ namespace CGL {
             {
                 // TODO (Part 2): Add the force due to gravity, then compute the new velocity and position
 
-                m->forces += gravity * m->forces;
+                m->forces += gravity;
                 Vector2D a = m->forces / m->mass; 
                 m->velocity += delta_t * a;
                 m->position += delta_t * m->velocity; 
