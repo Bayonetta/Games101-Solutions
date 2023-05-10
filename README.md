@@ -1,13 +1,10 @@
-# GAMES101_Assignments_Prosonal
-
+# GAMES101_Assignments_Personal
 
 
 自学图形学记录
 
 
 官网：[计算机图形学与混合现实研讨会 – GAMES: Graphics And Mixed Environment Seminar](http://games-cn.org/)
-
-直播：[GAMES-Webinar视频直播 - 虎牙直播](https://www.huya.com/19077762)
 
 录像：[GAMES101-现代计算机图形学入门-闫令琪_哔哩哔哩](https://www.bilibili.com/video/BV1X7411F744)
 
@@ -19,4 +16,4 @@
 
 
 
-Running Platform: Mac OS 10.15
+Running Platform: Ubuntu_WSL + VSCode
